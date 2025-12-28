@@ -1,8 +1,9 @@
-package com.example.todo.service;
+package com.example.todobackend.service;
 
-import com.example.todo.exception.TodoNotFoundException;
-import com.example.todo.model.Todo;
-import com.example.todo.repository.TodoRepository;
+
+import com.example.todobackend.exception.TodoNotFoundException;
+import com.example.todobackend.model.Todo;
+import com.example.todobackend.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

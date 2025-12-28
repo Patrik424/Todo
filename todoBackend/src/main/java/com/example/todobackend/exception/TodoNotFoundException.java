@@ -1,5 +1,5 @@
-package com.example.todo.exception;
+package com.example.todobackend.exception;
 
 public class TodoNotFoundException extends RuntimeException{
-    public TodoNotFoundException(Long id){super("No Tode with id: " + id);}
+    public TodoNotFoundException(Long id){super("No Todo with id: " + id);}
 }
