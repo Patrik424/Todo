@@ -1,22 +1,41 @@
+// playwright.config.js
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests',
-  fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  timeout: 30_000,
+  expect: {
+    timeout: 5000
+  },
+  reporter: [['html', { outputFolder: 'playwright-report' }]],
   use: {
-    baseURL: 'http://localhost:5173', // frontend URL för Playwright
+    headless: true,
+    baseURL: 'http://localhost:8080', // Backend testprofil
     trace: 'on-first-retry',
+    ignoreHTTPSErrors: true,
   },
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
-    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
   ],
+  webServer: {
+    command: 'vite', // starta frontend
+    port: 5173,
+    reuseExistingServer: !process.env.CI,
+  },
 });
+
+
 
 
 

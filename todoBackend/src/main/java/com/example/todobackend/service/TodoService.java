@@ -38,6 +38,9 @@ public class TodoService {
         todoRepository.deleteById(id);
     }
 
+    public void resetTodos() {
+        todoRepository.deleteAll();
+    }
 
 
 }

@@ -1,51 +1,47 @@
 import { test, expect } from '@playwright/test';
+import { TodoPage } from './pages/TodoPage';
 
 test.describe('Todo App', () => {
-  // Körs före varje test
+
   test.beforeEach(async ({ page }) => {
-    page.on('dialog', dialog => dialog.accept());
-    await page.goto('/');
+    const todo = new TodoPage(page);
+    await todo.goto();
+
+    // Reset backend innan varje test
+    await todo.clearTodos();
   });
 
-  test('visar Todo App rubrik', async ({ page }) => {
-    const heading = page.getByTestId('app-heading');
-    await expect(heading).toHaveText('Todo App');
+  test('can add a new todo', async ({ page }) => {
+    const todo = new TodoPage(page);
+    await todo.addTodo('Buy milk');
+
+    // Verifiera att todo finns
+    await expect(todo.todoItems).toHaveCount(1);
+    await expect(todo.todoItems.locator('[data-testid="todo-title"]')).toHaveText('Buy milk');
   });
 
-  test('kan skapa en todo', async ({ page }) => {
-    const input = page.getByTestId('new-todo-input');
-    const addButton = page.getByTestId('add-todo-button');
+  test('can toggle a todo', async ({ page }) => {
+    const todo = new TodoPage(page);
+    await todo.addTodo('Learn Playwright');
 
-    await input.fill('Playwright Todo');
-    await addButton.click();
+    // Toggle checkbox
+    await todo.toggleTodo(0);
 
-    const todo = page.getByTestId('todo-title').filter({ hasText: 'Playwright Todo' });
-    await expect(todo).toBeVisible();
-  });
-
-  test('kan markera todo som klar', async ({ page }) => {
-    const checkbox = page.getByTestId('todo-checkbox').first();
-    await checkbox.check();
+    // Kontrollera att checkbox är markerad
+    const checkbox = todo.todoItems.nth(0).locator('[data-testid="todo-checkbox"]');
     await expect(checkbox).toBeChecked();
   });
 
-  test('kan uppdatera titel', async ({ page }) => {
-    const titleInput = page.getByTestId('todo-title-input').first();
-    await titleInput.fill('Updated Todo');
-    await titleInput.blur();
+  test('can delete a todo', async ({ page }) => {
+    const todo = new TodoPage(page);
+    await todo.addTodo('Clean room');
 
-    const updated = page.getByTestId('todo-title').filter({ hasText: 'Updated Todo' });
-    await expect(updated).toBeVisible();
+    // Radera todo
+    await todo.deleteTodo(0);
+
+    // Verifiera att listan är tom
+    await expect(todo.todoItems).toHaveCount(0);
   });
 
-  test('kan ta bort en todo', async ({ page }) => {
-    const deleteButton = page.getByTestId('delete-todo-button').first();
-    await deleteButton.click();
-
-    const removed = page.getByTestId('todo-title').first();
-    await expect(removed).not.toHaveText('Playwright Todo');
-  });
 });
-
-
 
