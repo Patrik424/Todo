@@ -27,7 +27,7 @@ const TodoList = () => {
   const addTodo = async () => {
     if (!newTodo.trim()) return;
     try {
-        const res = await api.post('', { title: newTodo, completed: false });
+      const res = await api.post('', { title: newTodo, completed: false });
       setTodos(prev => [...prev, res.data]);
       setNewTodo('');
     } catch (err) {
@@ -37,7 +37,7 @@ const TodoList = () => {
 
   const toggleTodo = async (todo) => {
     try {
-        const res = await api.put(`${todo.id}`, { ...todo, completed: !todo.completed });
+      const res = await api.put(`${todo.id}`, { ...todo, completed: !todo.completed });
       setTodos(prev => prev.map(t => (t.id === todo.id ? res.data : t)));
     } catch (err) {
       console.error('Failed to toggle todo', err);
@@ -46,7 +46,7 @@ const TodoList = () => {
 
   const deleteTodo = async (id) => {
     try {
-        await api.delete(`${id}`);
+      await api.delete(`${id}`);
       setTodos(prev => prev.filter(t => t.id !== id));
     } catch (err) {
       console.error('Failed to delete todo', err);
@@ -57,29 +57,40 @@ const TodoList = () => {
 
   return (
     <div className="container mt-4">
-      <h1>Todo List</h1>
+      <h1 className="text-center mb-4">Todo List</h1>
 
-      <div className="d-flex mb-3">
+      <div className="d-flex flex-wrap mb-3">
         <Form.Control
           data-testid="new-todo-input"
+          className="flex-grow-1 mb-2 mb-md-0"
           type="text"
           placeholder="Add new todo"
           value={newTodo}
           onChange={(e) => setNewTodo(e.target.value)}
         />
-        <Button data-testid="add-todo-btn" className="ms-2" onClick={addTodo}>
+        <Button
+          data-testid="add-todo-btn"
+          className="ms-0 ms-md-2 mb-2 mb-md-0"
+          onClick={addTodo}
+        >
           Add
         </Button>
       </div>
 
       {todos.map(todo => (
-        <TodoItem key={todo.id} todo={todo} onToggle={toggleTodo} onDelete={deleteTodo} />
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+          onToggle={() => toggleTodo(todo)}
+          onDelete={() => deleteTodo(todo.id)}
+        />
       ))}
     </div>
   );
 };
 
 export default TodoList;
+
 
 
 

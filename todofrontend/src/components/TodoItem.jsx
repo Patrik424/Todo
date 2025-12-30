@@ -5,35 +5,37 @@ const TodoItem = ({ todo, onToggle, onDelete }) => {
   return (
     <div
       data-testid="todo-item"
-      className="d-flex justify-content-between align-items-center border p-2 mb-2 rounded"
+      className="d-flex align-items-center justify-content-between mb-2 p-2 border rounded"
     >
-      <Form.Check
-        data-testid="todo-checkbox"
+      <Form.Check 
         type="checkbox"
         checked={todo.completed}
-        onChange={() => onToggle(todo)}
-        label={
-          <span data-testid="todo-title">
-            {todo.title}
-          </span>
-        }
+        onChange={onToggle}
+        data-testid="todo-checkbox"
+        className="me-2"
       />
-
+      <span
+        data-testid="todo-title"
+        style={{
+          textDecoration: todo.completed ? 'line-through' : 'none',
+          flexGrow: 1
+        }}
+      >
+        {todo.title}
+      </span>
       <Button
-  data-testid="delete-todo-btn"
-  variant="danger"
-  size="sm"
-  onClick={() => {
-    if (window.confirm(`Är du säker på att du vill ta bort "${todo.title}"?`)) {
-      onDelete(todo.id);
-    }
-  }}
->
-  Delete
-</Button>
+        variant="danger"
+        size="sm"
+        onClick={onDelete}
+        data-testid="delete-todo-btn"
+      >
+        Delete
+      </Button>
     </div>
   );
 };
 
 export default TodoItem;
+
+
 

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Bas-API för /todo endpoints
 const api = axios.create({
-  baseURL: 'http://localhost:8080/api/todo', // keep as is
+  baseURL: 'http://localhost:8080/api/todo',
   headers: { 'Content-Type': 'application/json' },
 });
 
@@ -12,3 +12,4 @@ export const resetTodos = async () => {
 };
 
 export default api;
+

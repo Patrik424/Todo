@@ -38,8 +38,8 @@ public class TodoService {
         todoRepository.deleteById(id);
     }
 
-    public void resetTodos() {
-        todoRepository.deleteAll();
+    public void deleteAllTodos() {
+        todoRepository.deleteAll(); // Radera alla rader i databasen
     }
 
 

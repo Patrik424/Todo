@@ -54,7 +54,7 @@ public class TodoController {
 
     @DeleteMapping("/reset")
     public ResponseEntity<Void> resetTodos() {
-        todoService.resetTodos();
+        todoService.deleteAllTodos(); // Se till att alla tas bort
         return ResponseEntity.noContent().build();
     }
 }
