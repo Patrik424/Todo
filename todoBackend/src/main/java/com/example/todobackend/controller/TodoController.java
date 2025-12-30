@@ -1,9 +1,9 @@
 package com.example.todobackend.controller;
 
+import com.example.todobackend.exception.TodoNotFoundException;
 import com.example.todobackend.model.Todo;
 import com.example.todobackend.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +21,20 @@ public class TodoController {
     public List<Todo> getAllTodo() {
         return todoService.getAllTodo();
     }
-
     @GetMapping("/todo/{id}")
     public ResponseEntity<Todo> getTodoById(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(todoService.getTodoById(id), HttpStatus.OK);
+        try {
+            Todo todo = todoService.getTodoById(id);
+            return ResponseEntity.ok(todo);
+        } catch (TodoNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
+
+//    @GetMapping("/todo/{id}")
+//    public ResponseEntity<Todo> getTodoById(@PathVariable("id") Long id) {
+//        return new ResponseEntity<>(todoService.getTodoById(id), HttpStatus.OK);
+//    }
 
     @PostMapping("/todo")
     public ResponseEntity<Todo> newTodo(@RequestBody Todo todo) {
