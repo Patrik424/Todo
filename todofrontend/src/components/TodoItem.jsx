@@ -20,13 +20,17 @@ const TodoItem = ({ todo, onToggle, onDelete }) => {
       />
 
       <Button
-        data-testid="delete-todo-btn"
-        variant="danger"
-        size="sm"
-        onClick={() => onDelete(todo.id)}
-      >
-        Delete
-      </Button>
+  data-testid="delete-todo-btn"
+  variant="danger"
+  size="sm"
+  onClick={() => {
+    if (window.confirm(`Är du säker på att du vill ta bort "${todo.title}"?`)) {
+      onDelete(todo.id);
+    }
+  }}
+>
+  Delete
+</Button>
     </div>
   );
 };
