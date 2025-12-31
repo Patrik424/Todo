@@ -41,7 +41,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22   # Viktigt för Vite
+          node-version: 22  # Viktigt för Vite
 
       - name: Install frontend dependencies
         working-directory: todofrontend
