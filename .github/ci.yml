@@ -60,7 +60,7 @@ jobs:
         run: npm install -g newman
 
       - name: Run API tests with Newman
-        run: newman run postman/Todo.postman_collection.json
+        run: newman run postman/todo.postman_collection.json
 
       # ---------- REPORT ----------
       - name: Upload Playwright report
