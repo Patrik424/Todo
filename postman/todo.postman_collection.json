@@ -17,20 +17,25 @@
 							"  pm.response.to.have.status(200);\r",
 							"});\r",
 							"\r",
+							"const body = pm.response.json();\r",
+							"\r",
 							"pm.test(\"Svar är ett objekt\", () => {\r",
-							"  pm.expect(pm.response.json()).to.be.an(\"object\");\r",
+							"  pm.expect(body).to.be.an(\"object\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Titel är uppdaterad\", () => {\r",
-							"  pm.expect(pm.response.json().title).to.equal(\"Finish Node project\");\r",
+							"  pm.expect(body.title).to.eql(\"Finish Node project\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Completed är boolean\", () => {\r",
-							"  pm.expect(pm.response.json().completed).to.be.a(\"boolean\");\r",
+							"  pm.expect(body.completed).to.be.a(\"boolean\");\r",
 							"});\r",
 							"\r",
-							"pm.environment.set(\"todoId\", pm.response.json().id);\r",
-							"\r",
+							"pm.test(\"Rätt id returneras\", () => {\r",
+							"  pm.expect(body.id).to.eql(\r",
+							"    pm.collectionVariables.get(\"todoId\")\r",
+							"  );\r",
+							"});\r",
 							""
 						],
 						"type": "text/javascript",
@@ -52,7 +57,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/todo/3",
+					"raw": "http://localhost:8080/api/todo/{{todoId}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -61,7 +66,7 @@
 					"path": [
 						"api",
 						"todo",
-						"3"
+						"{{todoId}}"
 					]
 				}
 			},
@@ -75,7 +80,7 @@
 					"script": {
 						"exec": [
 							"pm.test(\"Status 204\", () => {\r",
-							"    pm.response.to.have.status(204);\r",
+							"  pm.response.to.have.status(204);\r",
 							"});\r",
 							""
 						],
@@ -89,7 +94,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/todo/4",
+					"raw": "http://localhost:8080/api/todo/{{todoId}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -98,7 +103,7 @@
 					"path": [
 						"api",
 						"todo",
-						"4"
+						"{{todoId}}"
 					]
 				}
 			},
@@ -112,22 +117,25 @@
 					"script": {
 						"exec": [
 							"pm.test(\"Status 200\", () => {\r",
-							"    pm.response.to.have.status(200);\r",
+							"  pm.response.to.have.status(200);\r",
 							"});\r",
 							"\r",
+							"const body = pm.response.json();\r",
+							"\r",
 							"pm.test(\"Svar är ett objekt\", () => {\r",
-							"    pm.expect(pm.response.json()).to.be.an(\"object\");\r",
+							"  pm.expect(body).to.be.an(\"object\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Har rätt fält\", () => {\r",
-							"    const todo = pm.response.json();\r",
-							"    pm.expect(todo).to.have.property(\"id\");\r",
-							"    pm.expect(todo).to.have.property(\"title\");\r",
-							"    pm.expect(todo).to.have.property(\"completed\");\r",
+							"  pm.expect(body).to.have.property(\"id\");\r",
+							"  pm.expect(body).to.have.property(\"title\");\r",
+							"  pm.expect(body).to.have.property(\"completed\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Rätt id returneras\", () => {\r",
-							"    pm.expect(pm.response.json().id).to.equal(pm.environment.get(\"todoId\"));\r",
+							"  pm.expect(body.id).to.eql(\r",
+							"    pm.collectionVariables.get(\"todoId\")\r",
+							"  );\r",
 							"});\r",
 							""
 						],
@@ -141,7 +149,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/todo/3",
+					"raw": "http://localhost:8080/api/todo/{{todoId}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -150,7 +158,7 @@
 					"path": [
 						"api",
 						"todo",
-						"3"
+						"{{todoId}}"
 					]
 				}
 			},
@@ -167,21 +175,27 @@
 							"  pm.response.to.have.status(201);\r",
 							"});\r",
 							"\r",
+							"const body = pm.response.json();\r",
+							"\r",
 							"pm.test(\"Svar är ett objekt\", () => {\r",
-							"  pm.expect(pm.response.json()).to.be.an(\"object\");\r",
+							"  pm.expect(body).to.be.an(\"object\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Har id\", () => {\r",
-							"  pm.expect(pm.response.json().id).to.exist;\r",
+							"  pm.expect(body.id).to.exist;\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Titel är korrekt\", () => {\r",
-							"  pm.expect(pm.response.json().title).to.eql(\"Drink Beer\");\r",
+							"  pm.expect(body.title).to.eql(\"Drink Beer\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Completed är false\", () => {\r",
-							"  pm.expect(pm.response.json().completed).to.eql(false);\r",
-							"});"
+							"  pm.expect(body.completed).to.eql(false);\r",
+							"});\r",
+							"\r",
+							"// 🔑 Spara ID för resten av testen\r",
+							"pm.collectionVariables.set(\"todoId\", body.id);\r",
+							""
 						],
 						"type": "text/javascript",
 						"packages": {},
@@ -224,19 +238,21 @@
 					"script": {
 						"exec": [
 							"pm.test(\"Status 200\", () => {\r",
-							"    pm.response.to.have.status(200);\r",
+							"  pm.response.to.have.status(200);\r",
 							"});\r",
+							"\r",
+							"const body = pm.response.json();\r",
 							"\r",
 							"pm.test(\"Svar är en array\", () => {\r",
-							"    pm.expect(pm.response.json()).to.be.an(\"array\");\r",
+							"  pm.expect(body).to.be.an(\"array\");\r",
 							"});\r",
 							"\r",
-							"pm.test(\"Varje todo har id\", () => {\r",
-							"    pm.response.json().forEach(todo => {\r",
-							"        pm.expect(todo.id).to.exist;\r",
-							"        pm.expect(todo.title).to.exist;\r",
-							"        pm.expect(todo.completed).to.exist;\r",
-							"    });\r",
+							"pm.test(\"Varje todo har fält\", () => {\r",
+							"  body.forEach(todo => {\r",
+							"    pm.expect(todo).to.have.property(\"id\");\r",
+							"    pm.expect(todo).to.have.property(\"title\");\r",
+							"    pm.expect(todo).to.have.property(\"completed\");\r",
+							"  });\r",
 							"});\r",
 							""
 						],
@@ -279,8 +295,9 @@
 					"script": {
 						"exec": [
 							"pm.test(\"Status 404 om todo inte finns\", () => {\r",
-							"    pm.response.to.have.status(404);\r",
-							"});"
+							"  pm.response.to.have.status(404);\r",
+							"});\r",
+							""
 						],
 						"type": "text/javascript",
 						"packages": {},
@@ -292,7 +309,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/todo/4932",
+					"raw": "http://localhost:8080/api/todo/{{todoId}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -301,11 +318,17 @@
 					"path": [
 						"api",
 						"todo",
-						"4932"
+						"{{todoId}}"
 					]
 				}
 			},
 			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "todoId",
+			"value": ""
 		}
 	]
 }
