@@ -62,6 +62,7 @@ jobs:
       - name: Run API tests with Newman
         run: newman run postman/todo.postman_collection.json
 
+
       # ---------- REPORT ----------
       - name: Upload Playwright report
         if: always()
